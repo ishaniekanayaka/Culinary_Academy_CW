@@ -225,7 +225,24 @@ public class StudentFormController implements Initializable {
 
     @FXML
     void tblStudentOnMouseClicked(MouseEvent event) {
-
+        StudentTM selectedItem = tblStudents.getSelectionModel().getSelectedItem();
+        try {
+            if (selectedItem != null) {
+                btnUpdate.setDisable(false);
+                btnDelete.setDisable(false);
+                btnSave.setDisable(true);
+                txtId.setText(selectedItem.getStudent_id());
+                txtName.setText(selectedItem.getName());
+                txtAddress.setText(selectedItem.getAddress());
+                cmb_Codinator_ID.setValue(selectedItem.getUseId());
+                txtContact.setText(selectedItem.getContact());
+                cmbDob.setValue(selectedItem.getDate());
+            } else {
+                btnUpdate.setDisable(true);
+            }
+        } catch (RuntimeException e) {
+            new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
+        }
     }
 
 
