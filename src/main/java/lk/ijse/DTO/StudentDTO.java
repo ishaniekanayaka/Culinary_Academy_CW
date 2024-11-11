@@ -20,8 +20,14 @@ public class StudentDTO {
     private User userId;
     private LocalDate date;
 
-    public StudentDTO(String student_id, String name){
-        this.student_id = student_id;
+
+
+    public StudentDTO(String studentId, String name, String address, String contact, LocalDate date, User user) {
+        this.student_id = studentId;
         this.name = name;
+        this.address = address;
+        this.contact = contact;
+        this.date = date;
+        this.userId = user;
     }
 }

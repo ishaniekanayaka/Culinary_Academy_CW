@@ -46,18 +46,19 @@ public class StudentBOImpl implements StudentBO<StudentDTO> {
         }
 
         return studentDTOS;
+       /* List<StudentDTO> studentDTOS = new ArrayList<>();
+        List<Student> all = studentDAO.getAll();
+
+        for (Student student : all){
+            studentDTOS.add(new StudentDTO(student.getStudent_id(), student.getName(), student.getAddress(), student.getContact(), student.getDate(), student.getUser()));
+        }
+        return studentDTOS;*/
     }
 
     @Override
     public boolean updateStudent(StudentDTO entity) throws IOException {
-        Student student = new Student();
-        student.setStudent_id(entity.getStudent_id());
-        student.setName(entity.getName());
-        student.setAddress(entity.getAddress());
-        student.setContact(entity.getContact());
-        student.setUser(entity.getUserId());
-        student.setDate(entity.getDate());
-        return studentDAO.update(student);
+        return studentDAO.update(new Student(entity.getStudent_id(),entity.getName(), entity.getAddress(), entity.getContact(), entity.getDate(), entity.getUserId()));
+
     }
 
     @Override

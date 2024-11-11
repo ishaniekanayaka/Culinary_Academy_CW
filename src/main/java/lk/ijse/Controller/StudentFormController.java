@@ -1,16 +1,20 @@
 package lk.ijse.Controller;
 
 import com.jfoenix.controls.JFXButton;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import lk.ijse.DTO.StudentDTO;
+import lk.ijse.DTO.tm.StudentTM;
 import lk.ijse.bo.BOFactory;
 import lk.ijse.bo.custom.StudentBO;
 import lk.ijse.entity.User;
@@ -63,7 +67,7 @@ public class StudentFormController implements Initializable {
     private AnchorPane rootStudent;
 
     @FXML
-    private TableView<?> tblStudents;
+    private TableView<StudentTM> tblStudents;
 
     @FXML
     private TextField txtAddress;
@@ -78,6 +82,8 @@ public class StudentFormController implements Initializable {
     private TextField txtName;
 
     StudentBO studentBO = (StudentBO) BOFactory.getInstance().getBO(BOFactory.BOTypes.STUDENT);
+    ObservableList<StudentTM> obList = FXCollections.observableArrayList();
+
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -86,16 +92,64 @@ public class StudentFormController implements Initializable {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-       getAll();
+        try {
+            getAll();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         setCellValueFactory();
         setComboUser();
     }
 
     private void setCellValueFactory() {
+        colStudentId.setCellValueFactory(new PropertyValueFactory<>("student_id"));
+        colStudentName.setCellValueFactory(new PropertyValueFactory<>("name"));
+        colAddress.setCellValueFactory(new PropertyValueFactory<>("address"));
+        colContact.setCellValueFactory(new PropertyValueFactory<>("contact"));
+        colDob.setCellValueFactory(new PropertyValueFactory<>("date"));
+        colCoordinatorId.setCellValueFactory(new PropertyValueFactory<>("useId"));
+
     }
 
-    private void getAll() {
+    private void getAll() throws IOException {
+       /* try {
+           // ObservableList<StudentTm> studentTms = FXCollections.observableArrayList();
+            List<StudentDTO> allStudents = studentBO.getAllStudents();
 
+            for (StudentDTO studentDto : allStudents) {
+                StudentTM studentTm = new StudentTM(
+                        studentDto.getStudent_id(),
+                        studentDto.getName(),
+                        studentDto.getAddress(),
+                        studentDto.getContact(),
+                        studentDto.getUserId(),
+                        studentDto.getDate()
+                        // Ensure this matches the expected field
+                );
+                obList.add(studentTm);
+            }
+
+            tblStudents.setItems(obList);
+
+        } catch (Exception e) {
+            new Alert(Alert.AlertType.ERROR, "Error loading student data.").show();
+            e.printStackTrace();
+        }*/
+        List<StudentDTO> allStudents = studentBO.getAllStudents();
+
+        if (!(allStudents.isEmpty())) {
+
+            for (StudentDTO studentDTO : allStudents) {
+
+                obList.add(new StudentTM(studentDTO.getStudent_id(),
+                        studentDTO.getName(), studentDTO.getAddress(), studentDTO.getContact(),
+                        studentDTO.getUserId(), studentDTO.getDate()));
+
+                tblStudents.setItems(obList);
+            }
+        } else {
+            new Alert(Alert.AlertType.ERROR, "Empty Students :( !!!").show();
+        }
     }
 
     @FXML
@@ -121,6 +175,8 @@ public class StudentFormController implements Initializable {
         if(isSaved){
             setComboUser();
             new Alert(Alert.AlertType.CONFIRMATION,"Student save successfully....!!! :)").show();
+            getAll();
+            clearAll();
             AnchorPane rootNode = FXMLLoader.load(this.getClass().getResource("/view/Register_form.fxml"));
             Scene scene = new Scene(rootNode);
             Stage stage =(Stage) this.rootStudent.getScene().getWindow();
