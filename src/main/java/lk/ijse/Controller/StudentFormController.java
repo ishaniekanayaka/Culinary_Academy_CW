@@ -112,45 +112,30 @@ public class StudentFormController implements Initializable {
     }
 
     private void getAll() throws IOException {
-       /* try {
-           // ObservableList<StudentTm> studentTms = FXCollections.observableArrayList();
-            List<StudentDTO> allStudents = studentBO.getAllStudents();
+        // Clear the ObservableList to prevent duplicate entries.
+        obList.clear();
 
-            for (StudentDTO studentDto : allStudents) {
-                StudentTM studentTm = new StudentTM(
-                        studentDto.getStudent_id(),
-                        studentDto.getName(),
-                        studentDto.getAddress(),
-                        studentDto.getContact(),
-                        studentDto.getUserId(),
-                        studentDto.getDate()
-                        // Ensure this matches the expected field
-                );
-                obList.add(studentTm);
-            }
-
-            tblStudents.setItems(obList);
-
-        } catch (Exception e) {
-            new Alert(Alert.AlertType.ERROR, "Error loading student data.").show();
-            e.printStackTrace();
-        }*/
         List<StudentDTO> allStudents = studentBO.getAllStudents();
-
-        if (!(allStudents.isEmpty())) {
-
+        if (!allStudents.isEmpty()) {
             for (StudentDTO studentDTO : allStudents) {
-
-                obList.add(new StudentTM(studentDTO.getStudent_id(),
-                        studentDTO.getName(), studentDTO.getAddress(), studentDTO.getContact(),
-                        studentDTO.getUserId(), studentDTO.getDate()));
-
-                tblStudents.setItems(obList);
+                obList.add(new StudentTM(
+                        studentDTO.getStudent_id(),
+                        studentDTO.getName(),
+                        studentDTO.getAddress(),
+                        studentDTO.getContact(),
+                        studentDTO.getUserId(),
+                        studentDTO.getDate()
+                ));
             }
+            tblStudents.setItems(obList);
         } else {
-            new Alert(Alert.AlertType.ERROR, "Empty Students :( !!!").show();
+            new Alert(Alert.AlertType.ERROR, "No students found.").show();
         }
+
+        // Refresh the table view to ensure it's displaying the latest data.
+        tblStudents.refresh();
     }
+
 
     @FXML
     void btnClearOnAction(ActionEvent event) {
@@ -213,8 +198,21 @@ public class StudentFormController implements Initializable {
 
 
     @FXML
-    void btnUpdateOnAction(ActionEvent event) {
+    void btnUpdateOnAction(ActionEvent event) throws IOException {
+        User selectedCoordinator = (User) this.cmb_Codinator_ID.getSelectionModel().getSelectedItem();
 
+        boolean isUpdate = studentBO.updateStudent(new StudentDTO(txtId.getText(), txtName.getText(), txtAddress.getText(), txtContact.getText(), selectedCoordinator, cmbDob.getValue()));
+        if(isUpdate){
+            getAll();
+            setCellValueFactory();
+            tblStudents.refresh();
+            clearAll();
+            setComboUser();
+            new Alert(Alert.AlertType.CONFIRMATION,"Student update successfully....!!! :)").show();
+
+        }else {
+            new Alert(Alert.AlertType.ERROR,"Student update unsuccessfully....!!! :(").show();
+        }
     }
 
     @FXML
