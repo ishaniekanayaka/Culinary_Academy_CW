@@ -1,5 +1,7 @@
 package lk.ijse.util.config;
 
+import lk.ijse.entity.Programme;
+import lk.ijse.entity.Registration;
 import lk.ijse.entity.Student;
 import lk.ijse.entity.User;
 import org.hibernate.Session;
@@ -19,6 +21,8 @@ public class FactoryConfiguration {
         configuration.setProperties(properties);
         configuration.addAnnotatedClass(User.class);
         configuration.addAnnotatedClass(Student.class);
+        configuration.addAnnotatedClass(Programme.class);
+        configuration.addAnnotatedClass(Registration.class);
         /*configuration.addAnnotatedClass(Student.class);
         configuration.addAnnotatedClass(Programme.class);
         configuration.addAnnotatedClass(User.class);

@@ -19,7 +19,17 @@ public class StudentBOImpl implements StudentBO<StudentDTO> {
     @Override
     public boolean addStudent(StudentDTO entity) throws IOException {
 
-        return studentDAO.add(new Student(entity.getStudent_id(),entity.getName(), entity.getAddress(), entity.getContact(), entity.getDate(), entity.getUserId()));
+       // return studentDAO.add(new Student(entity.getStudent_id(),entity.getName(), entity.getAddress(), entity.getContact(), entity.getDate(), entity.getUserId()));
+        Student student = new Student();
+        student.setStudent_id(entity.getStudent_id());
+        student.setName(entity.getName());
+        student.setAddress(entity.getAddress());
+        student.setContact(entity.getContact());
+        student.setUser(entity.getUserId());
+        student.setDate(entity.getDate());
+
+
+        return studentDAO.add(student);
     }
 
     @Override
@@ -46,19 +56,20 @@ public class StudentBOImpl implements StudentBO<StudentDTO> {
         }
 
         return studentDTOS;
-       /* List<StudentDTO> studentDTOS = new ArrayList<>();
-        List<Student> all = studentDAO.getAll();
 
-        for (Student student : all){
-            studentDTOS.add(new StudentDTO(student.getStudent_id(), student.getName(), student.getAddress(), student.getContact(), student.getDate(), student.getUser()));
-        }
-        return studentDTOS;*/
     }
 
     @Override
     public boolean updateStudent(StudentDTO entity) throws IOException {
-        return studentDAO.update(new Student(entity.getStudent_id(),entity.getName(), entity.getAddress(), entity.getContact(), entity.getDate(), entity.getUserId()));
-
+       //return studentDAO.update(new Student(entity.getStudent_id(),entity.getName(), entity.getAddress(), entity.getContact(), entity.getDate(), entity.getUserId()));
+        Student student = new Student();
+        student.setStudent_id(entity.getStudent_id());
+        student.setName(entity.getName());
+        student.setAddress(entity.getAddress());
+        student.setContact(entity.getContact());
+        student.setUser(entity.getUserId());
+        student.setDate(entity.getDate());
+        return studentDAO.update(student);
     }
 
     @Override

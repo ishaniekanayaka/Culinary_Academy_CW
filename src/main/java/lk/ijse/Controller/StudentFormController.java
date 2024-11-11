@@ -12,6 +12,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import lk.ijse.DTO.StudentDTO;
 import lk.ijse.DTO.tm.StudentTM;
@@ -144,6 +145,20 @@ public class StudentFormController implements Initializable {
 
     @FXML
     void btnDeleteOnAction(ActionEvent event) throws IOException {
+        /*User selectedCoordinator = this.cmb_Codinator_ID.getSelectionModel().getSelectedItem();
+
+        boolean isUpdate = studentBO.deleteStudent(String.valueOf(new StudentDTO(txtId.getText(), txtName.getText(), txtAddress.getText(), txtContact.getText(), selectedCoordinator, cmbDob.getValue())));
+        if(isUpdate){
+            getAll();
+            setCellValueFactory();
+            tblStudents.refresh();
+            clearAll();
+            setComboUser();
+            new Alert(Alert.AlertType.CONFIRMATION,"Student Delete successfully....!!! :)").show();
+
+        }else {
+            new Alert(Alert.AlertType.ERROR,"Student Delete unsuccessfully....!!! :(").show();
+        }*/
         StudentTM selectedItem = tblStudents.getSelectionModel().getSelectedItem();
 
         try {
@@ -182,13 +197,27 @@ public class StudentFormController implements Initializable {
             new Alert(Alert.AlertType.CONFIRMATION,"Student save successfully....!!! :)").show();
             getAll();
             clearAll();
-            AnchorPane rootNode = FXMLLoader.load(this.getClass().getResource("/view/Register_form.fxml"));
+           /* AnchorPane rootNode = FXMLLoader.load(this.getClass().getResource("/view/Register_form.fxml"));
             Scene scene = new Scene(rootNode);
             Stage stage =(Stage) this.rootStudent.getScene().getWindow();
             stage.setScene(scene);
 
             stage.setTitle("dashboard Form");
-            stage.centerOnScreen();
+            stage.centerOnScreen();*/
+            AnchorPane rootNode = FXMLLoader.load(this.getClass().getResource("/view/Register_form.fxml"));
+            Scene scene = new Scene(rootNode);
+            Stage popupStage = new Stage();
+            popupStage.setScene(scene);
+            popupStage.setTitle("Register Form");
+
+            // Set the popup window to be modal (block input to other windows)
+            popupStage.initModality(Modality.APPLICATION_MODAL);
+
+            // Center the popup on the screen
+            popupStage.centerOnScreen();
+
+            // Show the popup
+            popupStage.showAndWait();
         }else {
             new Alert(Alert.AlertType.ERROR,"Student save unsuccessfully....!!! :(").show();
         }

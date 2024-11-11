@@ -1,6 +1,8 @@
 package lk.ijse.bo;
 
 
+import lk.ijse.bo.custom.impl.ProgrammeBOImpl;
+import lk.ijse.bo.custom.impl.RegistrationBOImpl;
 import lk.ijse.bo.custom.impl.StudentBOImpl;
 import lk.ijse.bo.custom.impl.UserBOImpl;
 
@@ -25,12 +27,12 @@ public class BOFactory {
         switch (boTypes) {
             case STUDENT:
                 return new StudentBOImpl();
-            /*case PROGRAMME:
-                return new ProgrammeBOImpl();*/
+            case PROGRAMME:
+                return new ProgrammeBOImpl();
             case USER:
                 return new UserBOImpl();
-          /*  case REGISTRATION:
-                return new RegistrationBOImpl();*/
+            case REGISTRATION:
+                return new RegistrationBOImpl();
             default:
                 return null;
         }
