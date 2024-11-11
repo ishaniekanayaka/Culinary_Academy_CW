@@ -143,8 +143,28 @@ public class StudentFormController implements Initializable {
     }
 
     @FXML
-    void btnDeleteOnAction(ActionEvent event) {
+    void btnDeleteOnAction(ActionEvent event) throws IOException {
+        StudentTM selectedItem = tblStudents.getSelectionModel().getSelectedItem();
 
+        try {
+            if (selectedItem != null) {
+                studentBO.deleteStudent(selectedItem.getStudent_id());
+                new Alert(Alert.AlertType.INFORMATION, "Student Deleted").show();
+                getAll();
+                clearAll();
+
+            } else {
+                new Alert(Alert.AlertType.ERROR, "Select Student first!").show();
+            }
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        btnUpdate.setDisable(true);
+        btnSave.setDisable(false);
+        btnDelete.setDisable(true);
     }
 
     private void setComboUser() {
